@@ -22,7 +22,7 @@ export class UsersService {
             throw new Error('Este usuario no exists');
         }
 
-        console.log(userdata.password);
+       
         
 
         return existingUser;
