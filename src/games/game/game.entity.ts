@@ -20,14 +20,13 @@ export class Game{
     @Column()
     precio: number;
 
-    @Column({
-        type: 'decimal',
-        precision: 2})
+    @Column()
     descuento: number;
 
-    @Column()
-    precio_descuento: number;
 
     @Column()
     image: string;
+
+    @Column()
+    image_port: string;
 } 
