@@ -15,11 +15,12 @@ export class UsersService {
     async login(userdata: User): Promise<User> {
         const existingUser = await this.userRepository.createQueryBuilder("user")
             .where("user.username = :username", { username: userdata.username })
+            .orWhere("user.email = :email", { email: userdata.username})
             .andWhere("user.password = :password", { password: userdata.password })
             .getOne();
 
         if (!existingUser) {
-            throw new Error('Este usuario no exists');
+            throw new Error('Este usuario no existe');
         }
 
        

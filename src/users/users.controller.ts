@@ -24,16 +24,16 @@ export class UsersController {
         });
     }
 
-    @Get('login')
-    login(@Body() userdata: User, @Res() response){
+    @Post('login')
+    login(@Body() userdata: User, @Res() response) {
         this.userService.login(userdata).then(user => {
             response.status(HttpStatus.CREATED).json(user);
         }).catch((error: Error) => {
             response.status(HttpStatus.FORBIDDEN).json(error.message);
-        });    
+        });
     }
 
     //Recibe todos los usuarios
-    
+
 
 }
