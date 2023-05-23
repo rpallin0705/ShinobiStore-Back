@@ -11,7 +11,16 @@ export class GamesService {
         private readonly gameRepository: Repository<Game>,
     ) { }
 
-    async getAllGames(): Promise<Game[]>{
+    async getAllGames(): Promise<Game[]> {
         return await this.gameRepository.find();
+    }
+
+    async getAgAME(name: string): Promise<Game[]> {
+
+        const game = await this.gameRepository.find({ where: { nombre: name } });
+        if (game.length === 0) {
+            throw new Error('Lo siento, el título que buscas no se ha encontrado');
+        }
+        return game;
     }
 }
