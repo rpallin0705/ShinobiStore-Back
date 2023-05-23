@@ -15,10 +15,10 @@ export class GamesService {
         return await this.gameRepository.find();
     }
 
-    async getAgAME(name: string): Promise<Game[]> {
+    async getAgAME(name: string): Promise<Game> {
 
-        const game = await this.gameRepository.find({ where: { nombre: name } });
-        if (game.length === 0) {
+        const game = await this.gameRepository.findOne({ where: { nombre: name } });
+        if (!game) {
             throw new Error('Lo siento, el título que buscas no se ha encontrado');
         }
         return game;
