@@ -3,15 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 //import { GamesController } from './games/games.controller';
 import { UsersController } from './users/users.controller';
-import { FavGamesController } from './fav-games/fav-games.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersService } from './users/users.service';
 import { User } from './users/user/user.entity';
-import { FavGamesService } from './fav-games/fav-games.service';
 import { GamesController } from './games/games.controller';
 import { GamesService } from './games/games.service';
 import { Game } from './games/game/game.entity';
-import { FavGame } from './fav-games/fav-game/fav-game.entity';
 
 @Module({
   imports: [
@@ -27,9 +24,9 @@ import { FavGame } from './fav-games/fav-game/fav-game.entity';
       logging: true,
 
     }),
-    TypeOrmModule.forFeature([User, Game, FavGame])
+    TypeOrmModule.forFeature([User, Game])
   ],
-  controllers: [AppController, UsersController, FavGamesController, GamesController],
-  providers: [AppService, UsersService, FavGamesService, GamesService],
+  controllers: [AppController, UsersController, GamesController],
+  providers: [AppService, UsersService, GamesService],
 })
 export class AppModule { }

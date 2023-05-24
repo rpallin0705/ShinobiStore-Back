@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Game } from './game/game.entity';
 import { Repository } from 'typeorm';
-import { FavGame } from 'src/fav-games/fav-game/fav-game.entity';
 
 @Injectable()
 export class GamesService {
@@ -22,5 +21,9 @@ export class GamesService {
             throw new Error('Lo siento, el título que buscas no se ha encontrado');
         }
         return game;
+    }
+
+    async getAllFavGames(){
+        
     }
 }

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/user/user.entity";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Game{
@@ -29,4 +30,5 @@ export class Game{
 
     @Column()
     image_port: string;
+
 } 

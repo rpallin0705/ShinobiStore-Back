@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Game } from "src/games/game/game.entity";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
 @Entity()
@@ -18,5 +19,13 @@ export class User {
 
     @Column()
     password: string;
+
+    @ManyToMany(() => Game, game => game.id)
+    @JoinTable({ name: 'user_my_game' })
+    favGames: Game[];
+
+    @ManyToMany(() => Game, game => game.id)
+    @JoinTable({ name: 'user_fav_game' })
+    myGames: Game[];
 
 }
