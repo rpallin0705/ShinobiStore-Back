@@ -1,7 +1,6 @@
 import { Game } from "src/games/game/game.entity";
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
-
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -20,12 +19,19 @@ export class User {
     @Column()
     password: string;
 
-    @ManyToMany(() => Game, game => game.id)
-    @JoinTable({ name: 'user_my_game' })
+    @ManyToMany(() => Game)
+    @JoinTable({
+        name: 'user_fav_games',
+        joinColumn: { name: 'user_id' },
+        inverseJoinColumn: { name: 'game_id' },
+    })
     favGames: Game[];
 
-    @ManyToMany(() => Game, game => game.id)
-    @JoinTable({ name: 'user_fav_game' })
+    @ManyToMany(() => Game)
+    @JoinTable({
+        name: 'user_my_games',
+        joinColumn: { name: 'user_id' },
+        inverseJoinColumn: { name: 'game_id' },
+    })
     myGames: Game[];
-
 }

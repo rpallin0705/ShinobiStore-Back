@@ -1,7 +1,7 @@
 //Controlador que gestiona la creación e inicio de sesión del usuario
 
 import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user-dto';
+import { CreateFavGame, CreateUserDto } from './dto/create-user-dto';
 import { UsersService } from './users.service';
 import { response } from 'express';
 import { User } from './user/user.entity';
@@ -33,7 +33,15 @@ export class UsersController {
         });
     }
 
-    //Recibe todos los usuarios
+    @Post('addgame')
+    addFav(@Body() createFavGAme: CreateFavGame, @Res() response) {
 
 
+        this.userService.addFavoriteGame(createFavGAme.userId, createFavGAme.gameId).then(favgame => {
+            response.status(HttpStatus.CREATED).json(favgame);
+        }).catch((error: Error) => {
+            response.status(HttpStatus.FORBIDDEN).json(error.message);
+        });
+        
+    }
 }

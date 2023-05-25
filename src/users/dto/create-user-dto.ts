@@ -5,3 +5,8 @@ export class CreateUserDto {
     readonly email: string; //email del usuario
     readonly passwd: string; // contraseña del usuario
 }
+
+export class CreateFavGame {
+    readonly userId: number; 
+    readonly gameId: number; 
+}

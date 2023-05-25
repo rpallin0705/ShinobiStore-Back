@@ -1,30 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
-import { Repository} from 'typeorm';
-import { CreateUserDto } from './dto/create-user-dto';
+import { Repository } from 'typeorm';
+import { CreateFavGame, CreateUserDto } from './dto/create-user-dto';
+import { Game } from 'src/games/game/game.entity';
+import { error } from 'console';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+        @InjectRepository(Game)
+        private readonly gameRepository: Repository<Game>,
     ) { }
 
 
     async login(userdata: User): Promise<User> {
         const existingUser = await this.userRepository.createQueryBuilder("user")
             .where("user.username = :username", { username: userdata.username })
-            .orWhere("user.email = :email", { email: userdata.username})
-            .andWhere("user.password = :password", { password: userdata.password })
+            .orWhere("user.email = :email", { email: userdata.username })
             .getOne();
 
         if (!existingUser) {
             throw new Error('Este usuario no existe');
         }
 
-       
-        
+
+        if (existingUser.password != userdata.password) {
+            throw new Error('Contraseña incorrecta');
+        }
+
+
 
         return existingUser;
     }
@@ -47,6 +54,23 @@ export class UsersService {
 
     }
 
+    async addFavoriteGame(userId: number, gameId: number): Promise<User> {
+        const user = await this.userRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.favGames', 'game')
+            .where('user.id = :userId', { userId })
+            .getOne();
+        const game = await this.gameRepository.findOneOrFail({ where: { id: gameId } });
 
+        if(!user || !game){
+            throw new Error("El juego o el usuario no existe");
+        }
 
+        user.favGames.push(game);
+        console.log(user);
+
+        return await this.userRepository.save(user);
+    }
+
+    // Resto del código del servicio...
 }
