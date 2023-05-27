@@ -1,7 +1,10 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Stock } from "src/stock/entities/stock.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Repository, } from "typeorm";
 
 @Entity()
-export class Game{
+export class Game {
+
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -30,4 +33,12 @@ export class Game{
     @Column()
     image_port: string;
 
-} 
+    @Column({ default: 0 })
+    n_stock: number;
+
+    @OneToMany(() => Stock, stock => stock.game)
+    stock: Stock[];
+
+
+    
+}

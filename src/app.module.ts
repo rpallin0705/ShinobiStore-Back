@@ -9,6 +9,11 @@ import { User } from './users/user/user.entity';
 import { GamesController } from './games/games.controller';
 import { GamesService } from './games/games.service';
 import { Game } from './games/game/game.entity';
+import { MygamesModule } from './mygames/mygames.module';
+import { StockController } from './stock/stock.controller';
+import { StockService } from './stock/stock.service';
+import { Stock } from './stock/entities/stock.entity';
+import { Mygame } from './mygames/entities/mygame.entity';
 
 @Module({
   imports: [
@@ -24,9 +29,11 @@ import { Game } from './games/game/game.entity';
       logging: true,
 
     }),
-    TypeOrmModule.forFeature([User, Game])
+    TypeOrmModule.forFeature([User, Game, Stock, Mygame]),
+    
+    
   ],
-  controllers: [AppController, UsersController, GamesController],
-  providers: [AppService, UsersService, GamesService],
+  controllers: [AppController, UsersController, GamesController,StockController],
+  providers: [AppService, UsersService, GamesService, StockService],
 })
 export class AppModule { }

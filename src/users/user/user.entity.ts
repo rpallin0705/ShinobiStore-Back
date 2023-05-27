@@ -27,11 +27,5 @@ export class User {
     })
     favGames: Game[];
 
-    @ManyToMany(() => Game)
-    @JoinTable({
-        name: 'user_my_games',
-        joinColumn: { name: 'user_id' },
-        inverseJoinColumn: { name: 'game_id' },
-    })
-    myGames: Game[];
+    
 }
