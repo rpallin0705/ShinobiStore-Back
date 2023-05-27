@@ -16,23 +16,12 @@ export class StockController {
     });
   }
 
-  @Get()
-  findAll() {
-    return this.stockService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.stockService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStockDto: UpdateStockDto) {
-    return this.stockService.update(+id, updateStockDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.stockService.remove(+id);
+  @Delete()
+  remove(@Body() gameId: number, @Res() response) {
+    this.stockService.buy(gameId).then(stock => {
+      response.status(HttpStatus.OK).json(stock);
+    }).catch((error: Error) => {
+      response.status(HttpStatus.FORBIDDEN).json(error.message);
+    });
   }
 }

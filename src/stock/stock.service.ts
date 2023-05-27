@@ -16,9 +16,13 @@ export class StockService {
   ) { }
 
 
-
+  /**
+   * Crea un nuevo objeto de stock asociado a un juego en la base de datos.
+   * @param gameId - El ID del juego al que se asociará el stock.
+   * @returns El objeto de stock creado.
+   */
   async create(gameId: any) {
-    console.log(gameId);
+
     const game: Game = await this.gameRepository.findOne({ where: { id: gameId.gameId } });
 
     if (!game) {
@@ -27,28 +31,37 @@ export class StockService {
 
 
     const stock = this.stockRepository.create();
-    game.n_stock += 1;
+    game.n_stock++;
     stock.game = game;
-    
+
     await this.gameRepository.save(game);
 
-    await this.stockRepository.save(stock);
-    return stock;
+
+    return await this.stockRepository.save(stock);;
   }
 
-  findAll() {
-    return `This action returns all stock`;
+
+/**
+* Compra un artículo de un juego específico en la base de datos.
+* @param gameId - El ID del juego del cual se quiere comprar un artículo.
+*/
+async buy(gameId: any): Promise<Game> {
+
+  const game: Game = await this.gameRepository.findOne({ where: { id: gameId.gameId } });
+
+  if (!game) {
+    throw new Error("El título no existe");
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stock`;
+  const stock: Stock = await this.stockRepository.findOne({ where: { game: gameId.gameId } });
+  if (!stock) {
+    throw new Error("No hay más artículos");
   }
+  game.n_stock--;
 
-  update(id: number, updateStockDto: UpdateStockDto) {
-    return `This action updates a #${id} stock`;
-  }
+  await this.gameRepository.save(game);
+  await this.stockRepository.delete(stock.id);
+  return game;
+}
 
-  remove(id: number) {
-    return `This action removes a #${id} stock`;
-  }
 }
