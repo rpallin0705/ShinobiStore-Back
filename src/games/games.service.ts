@@ -23,7 +23,5 @@ export class GamesService {
         return game;
     }
 
-    async getAllFavGames(){
-        
-    }
+  
 }

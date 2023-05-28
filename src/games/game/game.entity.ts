@@ -36,9 +36,7 @@ export class Game {
     @Column({ default: 0 })
     n_stock: number;
 
-    @OneToMany(() => Stock, stock => stock.game)
-    stock: Stock[];
-
+   
 
     
 }

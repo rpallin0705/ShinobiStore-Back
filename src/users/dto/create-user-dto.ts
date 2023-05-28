@@ -6,7 +6,3 @@ export class CreateUserDto {
     readonly passwd: string; // contraseña del usuario
 }
 
-export class CreateFavGame {
-    readonly userId: number; 
-    readonly gameId: number; 
-}

@@ -14,6 +14,12 @@ import { StockController } from './stock/stock.controller';
 import { StockService } from './stock/stock.service';
 import { Stock } from './stock/entities/stock.entity';
 import { Mygame } from './mygames/entities/mygame.entity';
+import { Tarjeta } from './tarjetas/entities/tarjeta.entity';
+import { FavGame } from './fav-games/entities/fav-game.entity';
+import { FavGamesService } from './fav-games/fav-games.service';
+import { TarjetasService } from './tarjetas/tarjetas.service';
+import { TarjetasController } from './tarjetas/tarjetas.controller';
+import { FavGamesController } from './fav-games/fav-games.controller';
 
 @Module({
   imports: [
@@ -29,11 +35,12 @@ import { Mygame } from './mygames/entities/mygame.entity';
       logging: true,
 
     }),
-    TypeOrmModule.forFeature([User, Game, Stock, Mygame]),
-    
-    
+    TypeOrmModule.forFeature([User, Game, Stock, Mygame, Tarjeta, FavGame]),
+
+
+
   ],
-  controllers: [AppController, UsersController, GamesController,StockController],
-  providers: [AppService, UsersService, GamesService, StockService],
+  controllers: [AppController, UsersController, GamesController, StockController, TarjetasController, FavGamesController],
+  providers: [AppService, UsersService, GamesService, StockService, FavGamesService, TarjetasService],
 })
 export class AppModule { }

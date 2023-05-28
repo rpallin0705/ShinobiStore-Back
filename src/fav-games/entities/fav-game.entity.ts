@@ -1,0 +1,15 @@
+import { Game } from "src/games/game/game.entity";
+import { User } from "src/users/user/user.entity";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity()
+export class FavGame {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @ManyToOne(() => User, user => user.id)
+    user: number;
+
+    @ManyToOne(() => Game, game => game.id)
+    game: number;
+}

@@ -1,5 +1,7 @@
+import { FavGame } from "src/fav-games/entities/fav-game.entity";
 import { Game } from "src/games/game/game.entity";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Tarjeta } from "src/tarjetas/entities/tarjeta.entity";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -19,13 +21,10 @@ export class User {
     @Column()
     password: string;
 
-    @ManyToMany(() => Game)
-    @JoinTable({
-        name: 'user_fav_games',
-        joinColumn: { name: 'user_id' },
-        inverseJoinColumn: { name: 'game_id' },
-    })
-    favGames: Game[];
+    @OneToMany(() => Tarjeta, tarjeta => tarjeta.user)
+    stock: Tarjeta[];
 
-    
+    @OneToMany(() => FavGame, favGame => favGame.user)
+    favGame: FavGame[];
+
 }

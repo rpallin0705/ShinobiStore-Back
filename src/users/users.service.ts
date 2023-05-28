@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
 import { Repository } from 'typeorm';
-import { CreateFavGame, CreateUserDto } from './dto/create-user-dto';
+import { CreateUserDto } from './dto/create-user-dto';
 import { Game } from 'src/games/game/game.entity';
-import { error } from 'console';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +15,7 @@ export class UsersService {
     ) { }
 
 
-    async login(userdata: User): Promise<User> {
+    async login(userdata: User): Promise<any> {
         const existingUser = await this.userRepository.createQueryBuilder("user")
             .where("user.username = :username", { username: userdata.username })
             .orWhere("user.email = :email", { email: userdata.username })
@@ -33,7 +32,7 @@ export class UsersService {
 
 
 
-        return existingUser;
+        return await existingUser;
     }
 
     async createUser(usuarioNuevo: CreateUserDto): Promise<User> {
@@ -54,23 +53,7 @@ export class UsersService {
 
     }
 
-    async addFavoriteGame(userId: number, gameId: number): Promise<User> {
-        const user = await this.userRepository
-            .createQueryBuilder('user')
-            .leftJoinAndSelect('user.favGames', 'game')
-            .where('user.id = :userId', { userId })
-            .getOne();
-        const game = await this.gameRepository.findOneOrFail({ where: { id: gameId } });
+    
 
-        if(!user || !game){
-            throw new Error("El juego o el usuario no existe");
-        }
-
-        user.favGames.push(game);
-        console.log(user);
-
-        return await this.userRepository.save(user);
-    }
-
-    // Resto del código del servicio...
+  
 }
