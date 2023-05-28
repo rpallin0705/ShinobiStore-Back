@@ -28,7 +28,7 @@ export class FavGamesController {
   
 
 
-  @Delete()
+  @Post('delete')
   remove(@Body() createFavGameDto: CreateFavGameDto, @Res() response) {
     this.favGamesService.remove(createFavGameDto).then(favGames => {
       response.status(HttpStatus.OK).json(favGames);
