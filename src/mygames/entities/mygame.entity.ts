@@ -14,5 +14,5 @@ export class MyGame {
     game: number;
 
     @Column()
-    código: string;
+    codigo: string;
 }

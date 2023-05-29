@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMygameDto } from './dto/create-mygame.dto';
+import { CreateMygameDto, getMygameDto } from './dto/create-mygame.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user/user.entity';
 import { Game } from 'src/games/game/game.entity';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { MyGame } from './entities/mygame.entity';
 import { Stock } from 'src/stock/entities/stock.entity';
+
 
 @Injectable()
 export class MygamesService {
@@ -42,17 +43,19 @@ export class MygamesService {
     const nuevo = this.myGameRepository.create(createMygameDto);
     stock.activo = false;
     existingGame.n_stock--;
-    nuevo.código = stock.codigo;
-    console.log(nuevo.código);
+    nuevo.codigo = stock.codigo;
+    console.log(nuevo.codigo);
     await this.gameRepository.save(existingGame);
     await this.stockRepository.save(stock);
 
     return await this.myGameRepository.save(nuevo);
   }
 
-  async findAll(userId: number) {
+  async findAll(getMygameDto:getMygameDto) {
     return this.myGameRepository.find({
-      where: { user: userId },
+      where: {
+        user: Equal(getMygameDto.user),
+      },
       relations: ['game'],
     });
   }

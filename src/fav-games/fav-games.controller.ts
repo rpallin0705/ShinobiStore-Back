@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
 import { FavGamesService } from './fav-games.service';
 import { CreateFavGameDto } from './dto/create-fav-game.dto';
-import { response } from 'express';
 import { getMygameDto } from 'src/mygames/dto/create-mygame.dto';
 
 @Controller('fav-games')
