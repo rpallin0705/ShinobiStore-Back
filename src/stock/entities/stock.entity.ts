@@ -7,11 +7,13 @@ export class Stock {
     id: number;
 
     @ManyToOne(() => Game, game => game.id)
-    game: Game;
+    game: number;
 
     @Column({ unique: true })
     codigo: string;
 
+    @Column({default: true})
+    activo: boolean;
 
     //Genera un codigo aleatorio antes de insertar una fila
     @BeforeInsert()

@@ -32,7 +32,7 @@ export class StockService {
 
     const stock = this.stockRepository.create();
     game.n_stock++;
-    stock.game = game;
+    stock.game = game.id;
 
     await this.gameRepository.save(game);
 

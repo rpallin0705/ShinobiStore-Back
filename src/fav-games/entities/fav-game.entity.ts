@@ -1,6 +1,6 @@
 import { Game } from "src/games/game/game.entity";
 import { User } from "src/users/user/user.entity";
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class FavGame {
@@ -12,4 +12,5 @@ export class FavGame {
 
     @ManyToOne(() => Game, game => game.id)
     game: number;
+
 }

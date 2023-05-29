@@ -1,34 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Res } from '@nestjs/common';
 import { MygamesService } from './mygames.service';
 import { CreateMygameDto } from './dto/create-mygame.dto';
-import { UpdateMygameDto } from './dto/update-mygame.dto';
 
 @Controller('mygames')
 export class MygamesController {
-  constructor(private readonly mygamesService: MygamesService) {}
+  constructor(private readonly mygamesService: MygamesService) { }
 
   @Post()
-  create(@Body() createMygameDto: CreateMygameDto) {
-    return this.mygamesService.create(createMygameDto);
+  create(@Body() createMygameDto: CreateMygameDto, @Res() response) {
+    this.mygamesService.create(createMygameDto).then(favGame => {
+      response.status(HttpStatus.CREATED).json(favGame);
+    }).catch((error: Error) => {
+      response.status(HttpStatus.FORBIDDEN).json(error.message);
+    });
   }
 
   @Get()
-  findAll() {
-    return this.mygamesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mygamesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMygameDto: UpdateMygameDto) {
-    return this.mygamesService.update(+id, updateMygameDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mygamesService.remove(+id);
+  findAll(@Body() userId: number, @Res() response) {
+    this.mygamesService.findAll(userId).then(favGames => {
+      response.status(HttpStatus.OK).json(favGames);
+    }).catch((error: Error) => {
+      response.status(HttpStatus.FORBIDDEN).json(error.message);
+    });
   }
 }
+
+

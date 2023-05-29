@@ -3,9 +3,9 @@ import { CreateFavGameDto } from './dto/create-fav-game.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user/user.entity';
 import { Game } from 'src/games/game/game.entity';
-import { Repository } from 'typeorm';
+import { Equal, Repository, getRepository } from 'typeorm';
 import { FavGame } from './entities/fav-game.entity';
-import { error } from 'console';
+import { getMygameDto } from 'src/mygames/dto/create-mygame.dto';
 
 @Injectable()
 export class FavGamesService {
@@ -38,12 +38,15 @@ export class FavGamesService {
 
     const nuevo = this.favGameRepository.create(createFavGameDto);
 
+    console.log(nuevo);
     return await this.favGameRepository.save(nuevo);
   }
 
-  async findAll(userId: number) {
+  async findAll(getMygameDto:getMygameDto) {
     return this.favGameRepository.find({
-      where: { user: userId },
+      where: {
+        user: Equal(getMygameDto.user),
+      },
       relations: ['game'],
     });
   }
@@ -62,5 +65,5 @@ export class FavGamesService {
 
     await this.favGameRepository.delete(existingFavgame.id);
   }
-  
+
 }

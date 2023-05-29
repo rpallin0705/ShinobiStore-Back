@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } fr
 import { FavGamesService } from './fav-games.service';
 import { CreateFavGameDto } from './dto/create-fav-game.dto';
 import { response } from 'express';
+import { getMygameDto } from 'src/mygames/dto/create-mygame.dto';
 
 @Controller('fav-games')
 export class FavGamesController {
@@ -16,9 +17,9 @@ export class FavGamesController {
     });
   }
 
-  @Get()
-  findAll(userId: number, @Res() response) {
-    this.favGamesService.findAll(userId).then(favGames => {
+  @Post('get')
+  findAll(@Body() getMygameDto: getMygameDto, @Res() response) {
+    this.favGamesService.findAll(getMygameDto).then(favGames => {
       response.status(HttpStatus.OK).json(favGames);
     }).catch((error: Error) => {
       response.status(HttpStatus.FORBIDDEN).json(error.message);
