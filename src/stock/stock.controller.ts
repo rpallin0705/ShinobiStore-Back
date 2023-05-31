@@ -16,12 +16,12 @@ export class StockController {
     });
   }
 
-  @Delete()
-  remove(@Body() gameId: number, @Res() response) {
-    this.stockService.buy(gameId).then(stock => {
-      response.status(HttpStatus.OK).json(stock);
-    }).catch((error: Error) => {
-      response.status(HttpStatus.FORBIDDEN).json(error.message);
-    });
-  }
+  // @Delete()
+  // remove(@Body() gameId: number, @Res() response) {
+  //   this.stockService.buy(gameId).then(stock => {
+  //     response.status(HttpStatus.OK).json(stock);
+  //   }).catch((error: Error) => {
+  //     response.status(HttpStatus.FORBIDDEN).json(error.message);
+  //   });
+  // }
 }

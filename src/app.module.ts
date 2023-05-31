@@ -21,6 +21,7 @@ import { TarjetasController } from './tarjetas/tarjetas.controller';
 import { FavGamesController } from './fav-games/fav-games.controller';
 import { MygamesService } from './mygames/mygames.service';
 import { MygamesController } from './mygames/mygames.controller';
+import { MailerService } from './users/mailer.service';
 
 @Module({
   imports: [
@@ -42,6 +43,6 @@ import { MygamesController } from './mygames/mygames.controller';
 
   ],
   controllers: [AppController, UsersController, GamesController, StockController, TarjetasController, FavGamesController, MygamesController],
-  providers: [AppService, UsersService, GamesService, StockService, FavGamesService, TarjetasService, MygamesService],
+  providers: [AppService, UsersService, GamesService, StockService, FavGamesService, TarjetasService, MygamesService, MailerService],
 })
 export class AppModule { }

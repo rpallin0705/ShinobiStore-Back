@@ -6,6 +6,7 @@ import { Game } from 'src/games/game/game.entity';
 import { Equal, Repository } from 'typeorm';
 import { MyGame } from './entities/mygame.entity';
 import { Stock } from 'src/stock/entities/stock.entity';
+import { MailerService } from 'src/users/mailer.service';
 
 
 @Injectable()
@@ -20,6 +21,8 @@ export class MygamesService {
     private readonly gameRepository: Repository<Game>,
     @InjectRepository(Stock)
     private readonly stockRepository: Repository<Stock>,
+    private mailerService: MailerService,
+
 
   ) { }
 
@@ -39,6 +42,10 @@ export class MygamesService {
     if (!stock) {
       throw new Error("No hay stock de este juego");
     }
+
+    const info = 'Tu código de activación para ' + existingGame.nombre + ' es\n' +stock.codigo;
+
+    this.mailerService.sendEmail('rpalomareslinares@gmail.com', 'Buenas noches', info);
 
     const nuevo = this.myGameRepository.create(createMygameDto);
     stock.activo = false;
