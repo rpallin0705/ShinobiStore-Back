@@ -4,6 +4,7 @@ import { User } from './user/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user-dto';
 import { Game } from 'src/games/game/game.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -26,18 +27,23 @@ export class UsersService {
         }
 
 
-        if (existingUser.password != userdata.password) {
+        const isPasswordMatch = await bcrypt.compare(userdata.password, existingUser.password);
+
+        if (!isPasswordMatch) {
             throw new Error('Contraseña incorrecta');
         }
-
 
 
         return await existingUser;
     }
 
     async createUser(usuarioNuevo: CreateUserDto): Promise<User> {
-        const existingUser = await this.userRepository.findOne({ where: { username: usuarioNuevo.username } });
-        const existingEmail = await this.userRepository.findOne({ where: { email: usuarioNuevo.email } });
+        const existingUser = await this.userRepository.findOne({
+            where: { username: usuarioNuevo.username },
+        });
+        const existingEmail = await this.userRepository.findOne({
+            where: { email: usuarioNuevo.email },
+        });
 
         if (existingUser) {
             throw new Error('El usuario ya está registrado');
@@ -46,14 +52,22 @@ export class UsersService {
             throw new Error('El correo ya está registrado');
         }
 
-        const nuevo = this.userRepository.create(usuarioNuevo);
+        const hashedPassword = await bcrypt.hash(usuarioNuevo.passwd, 10);
 
+
+        const nuevo = this.userRepository.create({
+            ...usuarioNuevo,
+            password: hashedPassword,
+        });
 
         return await this.userRepository.save(nuevo);
 
+
     }
 
-    
+
 
   
+
+
 }
