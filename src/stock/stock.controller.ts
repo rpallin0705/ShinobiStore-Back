@@ -8,8 +8,8 @@ export class StockController {
   constructor(private readonly stockService: StockService) { }
 
   @Post()
-  create(@Body() gameId: number, @Res() response) {
-    this.stockService.create(gameId).then(stock => {
+  create(@Body() createStockDto: CreateStockDto, @Res() response) {
+    this.stockService.create(createStockDto).then(stock => {
       response.status(HttpStatus.CREATED).json(stock);
     }).catch((error: Error) => {
       response.status(HttpStatus.FORBIDDEN).json(error.message);

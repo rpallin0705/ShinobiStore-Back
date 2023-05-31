@@ -15,12 +15,12 @@ export class MailerService {
     });
   }
 
-  async sendEmail(to: string, subject: string, text: string) {
+  async sendEmail(to: string, subject: string, html: string) {
     await this.transporter.sendMail({
       from: 'shinobi_store',
       to,
       subject,
-      text,
+      html,
     });
   }
 }

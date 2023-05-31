@@ -21,7 +21,7 @@ import { TarjetasController } from './tarjetas/tarjetas.controller';
 import { FavGamesController } from './fav-games/fav-games.controller';
 import { MygamesService } from './mygames/mygames.service';
 import { MygamesController } from './mygames/mygames.controller';
-import { MailerService } from './users/mailer.service';
+import { MailerService } from './mailer.service';
 
 @Module({
   imports: [
