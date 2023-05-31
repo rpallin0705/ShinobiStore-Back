@@ -7,19 +7,19 @@ export class Tarjeta {
     id: number;
 
     @Column()
-    nombreApellidos: string;
+    nombre: string;
 
     @Column({ length: 19 })
     n_tarjeta: string;
 
-    @Column({ length: 3 })
-    num_Seg: string;
+    @Column()
+    cvv: number;
 
     @Column({ length: 5 })
     f_caducidad: string;
 
     @ManyToOne(() => User, user => user.id)
-    user: User;
- 
+    user: number;
+
 
 }
