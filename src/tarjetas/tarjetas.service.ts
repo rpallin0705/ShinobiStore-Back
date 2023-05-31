@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Equal, Repository } from 'typeorm';
 import { User } from 'src/users/user/user.entity';
 import { Tarjeta } from './entities/tarjeta.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class TarjetasService {
@@ -21,6 +22,7 @@ export class TarjetasService {
    * Crea un objeto de tarjeta para el usuario seleccionado
    * @param createTarjetaDto objeto createTarjetaDto from create-tarjeta-dto.ts
    * @returns .save de un nuevo objeto Tarejta
+   * 
    * TODO encriptar la tarjeta
    */
   async create(createTarjetaDto: CreateTarjetaDto): Promise<Tarjeta> {
@@ -32,7 +34,15 @@ export class TarjetasService {
       throw new Error("Esta tarjeta ya existe");
     }
 
-    const nuevaTarjeta = this.tarjetaRepository.create(createTarjetaDto);
+    const last_digit = await createTarjetaDto.n_tarjeta.slice(-4);
+
+    const hashedCard = await bcrypt.hash(createTarjetaDto.n_tarjeta, 10);
+
+    const nuevaTarjeta = this.tarjetaRepository.create({
+      ...createTarjetaDto,
+      n_tarjeta: hashedCard,
+      last_digits: last_digit
+    });
 
     return await this.tarjetaRepository.save(nuevaTarjeta);
   }
@@ -53,14 +63,14 @@ export class TarjetasService {
       }
     });
 
-    if(tarjetas.length == 0){
+    if (tarjetas.length == 0) {
       throw new Error("El usuario no tiene ninguna tarjeta registrada");
     }
 
     return tarjetas;
   }
 
-  
+
 
   /**
    * Recibe el id de una tarjeta, la busca y la borra

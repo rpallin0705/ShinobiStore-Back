@@ -9,8 +9,11 @@ export class Tarjeta {
     @Column()
     nombre: string;
 
-    @Column({ length: 19 })
+    @Column()
     n_tarjeta: string;
+
+    @Column({ length: 4, default: null })
+    last_digits: string;
 
     @Column()
     cvv: number;
