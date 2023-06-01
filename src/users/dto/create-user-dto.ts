@@ -5,4 +5,7 @@ export class CreateUserDto {
     readonly email: string; //email del usuario
     readonly passwd: string; // contraseña del usuario
 }
+export class UpdatePasswordDto{
+    readonly password: string; //Contraseña nueva
+}
 

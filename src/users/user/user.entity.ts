@@ -1,5 +1,4 @@
 import { FavGame } from "src/fav-games/entities/fav-game.entity";
-import { Game } from "src/games/game/game.entity";
 import { Tarjeta } from "src/tarjetas/entities/tarjeta.entity";
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -20,6 +19,12 @@ export class User {
 
     @Column()
     password: string;
+
+    @Column({ default: null, unique: true })
+    token: string;
+
+    @Column({ default: null, unique: true })
+    pass_token: string;
 
     @OneToMany(() => Tarjeta, tarjeta => tarjeta.user)
     stock: Tarjeta[];

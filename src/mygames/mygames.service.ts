@@ -46,7 +46,7 @@ export class MygamesService {
     }
 
     try {
-      this.emailSender(existingUser.email, stock.codigo, existingGame.nombre);
+      this.emailSender(existingUser.email, stock.codigo, existingGame.nombre, existingGame.image_port);
     } catch (error) {
       throw new Error(error);
     };
@@ -71,12 +71,12 @@ export class MygamesService {
     });
   }
 
-  private emailSender(correo: string, codigo: string, juego: string) {
+  private emailSender(correo: string, codigo: string, juego: string, imagen:string) {
 
     const image = fs.readFileSync('src/assets/icon.png', { encoding: 'base64' });
 
 
-    const mensaje = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><header style=><img style="height: 200px" src="https://drive.google.com/file/d/1HY8rGTV9kAyZ-o6BFzCAgPAzhbd1AkLW/view?usp=drive_link" alt=""></header><h1 style="padding-top:20px">Muchas gracias por su compra</h1><h1 style="padding-top:20px">Su código de activación para ' + juego + ' es:</h1><p style="padding-top:50px; font-size: 50px">' + codigo + '</p></body></html>'
+    const mensaje = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><header style=><img style="height: auto; width:100%;" src="'+imagen+'" alt=""></header><h1 style="padding-top:20px">Muchas gracias por su compra</h1><h1 style="padding-top:20px">Su código de activación para ' + juego + ' es:</h1><p style="padding-top:50px; font-size: 50px">' + codigo + '</p></body></html>'
     const subject = 'Gracias por su compra de ' + juego;
     this.mailerService.sendEmail(correo, subject, mensaje);
 

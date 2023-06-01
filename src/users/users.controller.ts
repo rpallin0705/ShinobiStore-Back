@@ -1,7 +1,7 @@
 //Controlador que gestiona la creación e inicio de sesión del usuario
 
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user-dto';
+import { Body, Controller, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
+import { CreateUserDto, UpdatePasswordDto } from './dto/create-user-dto';
 import { UsersService } from './users.service';
 import { response } from 'express';
 import { User } from './user/user.entity';
@@ -33,5 +33,34 @@ export class UsersController {
         });
     }
 
+    @Post('verification/:token')
+    verification(@Param('token') token: string, @Res() response) {
+        this.userService.verification(token).then(user => {
+            response.status(HttpStatus.OK).json(user);
+        }).catch((error: Error) => {
+            response.status(HttpStatus.FORBIDDEN).json(error.message);
+        });
+        
+    }
 
+    @Post('passwd/:id')
+    passReset(@Param('id') id: number, @Res() response) {
+        this.userService.passwordReset(id).then(user => {
+            response.status(HttpStatus.OK).json(user);
+        }).catch((error: Error) => {
+            response.status(HttpStatus.FORBIDDEN).json(error.message);
+        });
+        
+    }
+
+
+    @Patch('passwd/:token')
+    passChange(@Param('token') token:string, @Body()UpdatePasswordDto: UpdatePasswordDto, @Res() response) {
+        this.userService.passwordChange(UpdatePasswordDto,token).then(user => {
+            response.status(HttpStatus.OK).json(user);
+        }).catch((error: Error) => {
+            response.status(HttpStatus.FORBIDDEN).json(error.message);
+        });
+        
+    }
 }
