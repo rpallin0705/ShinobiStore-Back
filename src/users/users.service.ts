@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto, UpdatePasswordDto } from './dto/create-user-dto';
+import { CreateUserDto, LoginUserDto, UpdatePasswordDto } from './dto/create-user-dto';
 import { Game } from 'src/games/game/game.entity';
 import { MailerService } from 'src/mailer.service';
 import * as bcrypt from 'bcrypt';
@@ -19,20 +19,26 @@ export class UsersService {
         private mailerService: MailerService,
     ) { }
 
-
-    async login(userdata: User): Promise<any> {
+    /**
+     * 
+     * @param loginUserDto 
+     * @returns 
+     * TODO comprobar si el usaurio se ha verificado, si no se ha verificado mandar otro token
+     */
+    async login(loginUserDto: LoginUserDto): Promise<any> {
         const existingUser = await this.userRepository.createQueryBuilder("user")
-            .where("user.username = :username", { username: userdata.username })
-            .orWhere("user.email = :email", { email: userdata.username })
-            .andWhere("user.token = :token", { token: null })
+            .where("user.username = :username", { username: loginUserDto.username })
+            .orWhere("user.email = :email", { email: loginUserDto.username })
             .getOne();
 
         if (!existingUser) {
-            throw new Error('Este usuario no existe');
+        }
+        if (existingUser.token) {
+            throw new Error('Usuario no verificado');
         }
 
 
-        const isPasswordMatch = await bcrypt.compare(userdata.password, existingUser.password);
+        const isPasswordMatch = await bcrypt.compare(loginUserDto.password, existingUser.password);
 
         if (!isPasswordMatch) {
             throw new Error('Contraseña incorrecta');
@@ -149,7 +155,7 @@ export class UsersService {
         let mensaje: string = '';
         switch (passOrVerif) {
             case 0:
-                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Bienvenido/a ShinobiStore ' + username + '</h1><h1 style="padding-top:20px">Clicka el enlace para activar tu cuenta:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:8080/user/verfication/${token}">ShinobiStore verification</a></p></body>`
+                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Bienvenido/a ShinobiStore ' + username + '</h1><h1 style="padding-top:20px">Clicka el enlace para activar tu cuenta:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:8080/login/${token}">ShinobiStore verification</a></p></body>`
                 subject = 'Bienvenido a ShinobiStore ' + username;
                 break;
             case 1:

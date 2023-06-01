@@ -1,7 +1,7 @@
 //Controlador que gestiona la creación e inicio de sesión del usuario
 
 import { Body, Controller, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
-import { CreateUserDto, UpdatePasswordDto } from './dto/create-user-dto';
+import { CreateUserDto, LoginUserDto, UpdatePasswordDto } from './dto/create-user-dto';
 import { UsersService } from './users.service';
 import { response } from 'express';
 import { User } from './user/user.entity';
@@ -25,8 +25,8 @@ export class UsersController {
     }
 
     @Post('login')
-    login(@Body() userdata: User, @Res() response) {
-        this.userService.login(userdata).then(user => {
+    login(@Body() LoginUserDto: LoginUserDto, @Res() response) {
+        this.userService.login(LoginUserDto).then(user => {
             response.status(HttpStatus.CREATED).json(user);
         }).catch((error: Error) => {
             response.status(HttpStatus.FORBIDDEN).json(error.message);
