@@ -43,9 +43,9 @@ export class UsersController {
         
     }
 
-    @Post('passwd/:id')
-    passReset(@Param('id') id: number, @Res() response) {
-        this.userService.passwordReset(id).then(user => {
+    @Post('passwd/:email')
+    passReset(@Param('email') email: string, @Res() response) {
+        this.userService.passwordReset(email).then(user => {
             response.status(HttpStatus.OK).json(user);
         }).catch((error: Error) => {
             response.status(HttpStatus.FORBIDDEN).json(error.message);
@@ -55,8 +55,8 @@ export class UsersController {
 
 
     @Patch('passwd/:token')
-    passChange(@Param('token') token:string, @Body()UpdatePasswordDto: UpdatePasswordDto, @Res() response) {
-        this.userService.passwordChange(UpdatePasswordDto,token).then(user => {
+    passChange(@Param('token') token:string, @Body()updatePasswordDto: UpdatePasswordDto, @Res() response) {
+        this.userService.passwordChange(updatePasswordDto,token).then(user => {
             response.status(HttpStatus.OK).json(user);
         }).catch((error: Error) => {
             response.status(HttpStatus.FORBIDDEN).json(error.message);

@@ -7,10 +7,10 @@ export class MyGame {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, user => user.id)
+    @ManyToOne(() => User, user => user.id, { onDelete: "CASCADE" })
     user: number;
 
-    @ManyToOne(() => Game, game => game.id)
+    @ManyToOne(() => Game, game => game.id, { onDelete: "CASCADE" })
     game: number;
 
     @Column()

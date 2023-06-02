@@ -21,7 +21,7 @@ export class Tarjeta {
     @Column({ length: 5 })
     f_caducidad: string;
 
-    @ManyToOne(() => User, user => user.id)
+    @ManyToOne(() => User, user => user.id, { onDelete: "CASCADE" })
     user: number;
 
 

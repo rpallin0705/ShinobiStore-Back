@@ -23,7 +23,7 @@ export class UsersService {
      * 
      * @param loginUserDto 
      * @returns 
-     * TODO comprobar si el usaurio se ha verificado, si no se ha verificado mandar otro token
+     * TODO comprobar si el usaurio se ha verificado, si no se ha verificado mandar otro token y en front avisar de si ha caducado el token
      */
     async login(loginUserDto: LoginUserDto): Promise<any> {
         const existingUser = await this.userRepository.createQueryBuilder("user")
@@ -105,19 +105,22 @@ export class UsersService {
     }
 
 
-    async passwordReset(user: number) {
+    async passwordReset(email: string) {
 
         const existingUser = await this.userRepository.createQueryBuilder("user")
-            .where("user.id = :id", { id: user })
+            .where("user.email = :email", { email: email })
             .getOne();
 
+        if (!existingUser) {
+            throw new Error('Correo no registrado');
+        }
         const verificationToken = await jwt.sign({ username: existingUser.username }, 'Aghlsp9.dsgd', { expiresIn: '5m' });
         console.log(verificationToken);
 
         try {
             this.emailSender(existingUser.email, existingUser.username, verificationToken, 1);
         } catch (error) {
-            throw new Error(error);
+            throw new Error("El correo no se puedo enviar");
         }
 
         existingUser.pass_token = verificationToken;
@@ -130,6 +133,7 @@ export class UsersService {
             .where("user.pass_token = :pass_token", { pass_token: verificationToken })
             .getOne();
 
+            console.log(updatePassworddto.password)
         try {
             const valido = jwt.verify(verificationToken, 'Aghlsp9.dsgd');
         }
@@ -155,11 +159,11 @@ export class UsersService {
         let mensaje: string = '';
         switch (passOrVerif) {
             case 0:
-                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Bienvenido/a ShinobiStore ' + username + '</h1><h1 style="padding-top:20px">Clicka el enlace para activar tu cuenta:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:8080/login/${token}">ShinobiStore verification</a></p></body>`
+                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Bienvenido/a ShinobiStore ${username}'</h1><h1 style="padding-top:20px">Clicka el enlace para activar tu cuenta:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:8080/login/${token}">ShinobiStore verification</a></p></body>`
                 subject = 'Bienvenido a ShinobiStore ' + username;
                 break;
             case 1:
-                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Has solicitado cambiar la contraseña</h1><h1 style="padding-top:20px">Clicka el enlace para cambiar su contraseña:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:8080/user/psswd/${token}">ShinobiStore verification</a></p></body>`
+                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Has solicitado cambiar la contraseña</h1><h1 style="padding-top:20px">Clicka el enlace para cambiar su contraseña:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:8080/reset/${token}">ShinobiStore verification</a></p></body>`
                 subject = 'Cambio de contraseña de ' + username;
                 break;
         }
