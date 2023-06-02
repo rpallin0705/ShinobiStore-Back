@@ -22,8 +22,6 @@ export class TarjetasService {
    * Crea un objeto de tarjeta para el usuario seleccionado
    * @param createTarjetaDto objeto createTarjetaDto from create-tarjeta-dto.ts
    * @returns .save de un nuevo objeto Tarejta
-   * 
-   * TODO encriptar la tarjeta
    */
   async create(createTarjetaDto: CreateTarjetaDto): Promise<Tarjeta> {
     const existingUser = await this.userRepository.findOne({ where: { id: createTarjetaDto.user } });

@@ -23,7 +23,6 @@ export class UsersService {
      * 
      * @param loginUserDto 
      * @returns 
-     * TODO comprobar si el usaurio se ha verificado, si no se ha verificado mandar otro token y en front avisar de si ha caducado el token
      */
     async login(loginUserDto: LoginUserDto): Promise<any> {
         const existingUser = await this.userRepository.createQueryBuilder("user")
