@@ -19,6 +19,13 @@ export class UsersService {
         private mailerService: MailerService,
     ) { }
 
+
+
+
+    async getAll(): Promise<User[]>{
+        return await this.userRepository.find();
+    }
+
     /**
      * 
      * @param loginUserDto 

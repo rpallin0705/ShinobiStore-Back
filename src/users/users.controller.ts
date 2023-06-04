@@ -14,6 +14,15 @@ export class UsersController {
     }
 
 
+    @Get()
+    getAll(@Res() response) {
+        this.userService.getAll().then(user => {
+            response.status(HttpStatus.CREATED).json(user);
+        }).catch((error: Error) => {
+            response.status(HttpStatus.FORBIDDEN).json(error.message);
+        });
+    }
+
     //Metodo que crea un objeto de la clase CreateUserDto
     @Post('sing-up')
     create(@Body() createUserDto: CreateUserDto, @Res() response) {
@@ -40,7 +49,7 @@ export class UsersController {
         }).catch((error: Error) => {
             response.status(HttpStatus.FORBIDDEN).json(error.message);
         });
-        
+
     }
 
     @Post('passwd/:email')
@@ -50,17 +59,17 @@ export class UsersController {
         }).catch((error: Error) => {
             response.status(HttpStatus.FORBIDDEN).json(error.message);
         });
-        
+
     }
 
 
     @Patch('passwd/:token')
-    passChange(@Param('token') token:string, @Body()updatePasswordDto: UpdatePasswordDto, @Res() response) {
-        this.userService.passwordChange(updatePasswordDto,token).then(user => {
+    passChange(@Param('token') token: string, @Body() updatePasswordDto: UpdatePasswordDto, @Res() response) {
+        this.userService.passwordChange(updatePasswordDto, token).then(user => {
             response.status(HttpStatus.OK).json(user);
         }).catch((error: Error) => {
             response.status(HttpStatus.FORBIDDEN).json(error.message);
         });
-        
+
     }
 }
