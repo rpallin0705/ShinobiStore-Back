@@ -23,8 +23,8 @@ export class User {
     @Column({ default: null, unique: true })
     token: string;
 
-    @Column({ default: null, unique: true })
-    sysadmin: string;
+    @Column({ default: null })
+    sysadmin: boolean;
 
     @Column({ default: null, unique: true })
     pass_token: string;
