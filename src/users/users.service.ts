@@ -22,7 +22,7 @@ export class UsersService {
 
 
 
-    async getAll(): Promise<User[]>{
+    async getAll(): Promise<User[]> {
         return await this.userRepository.find();
     }
 
@@ -38,6 +38,7 @@ export class UsersService {
             .getOne();
 
         if (!existingUser) {
+            throw new Error('Usuario no encontrado');
         }
         if (existingUser.token) {
             throw new Error('Usuario no verificado');
@@ -50,7 +51,7 @@ export class UsersService {
             throw new Error('Contraseña incorrecta');
         }
 
-
+        console.log(existingUser);
         return await existingUser;
     }
 
@@ -139,7 +140,7 @@ export class UsersService {
             .where("user.pass_token = :pass_token", { pass_token: verificationToken })
             .getOne();
 
-            console.log(updatePassworddto.password)
+        console.log(updatePassworddto.password)
         try {
             const valido = jwt.verify(verificationToken, 'Aghlsp9.dsgd');
         }

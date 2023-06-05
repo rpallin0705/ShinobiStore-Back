@@ -24,6 +24,9 @@ export class User {
     token: string;
 
     @Column({ default: null, unique: true })
+    sysadmin: string;
+
+    @Column({ default: null, unique: true })
     pass_token: string;
 
     @OneToMany(() => Tarjeta, tarjeta => tarjeta.user)
