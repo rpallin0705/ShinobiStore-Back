@@ -1,25 +1,50 @@
 version: '3'
 services:
   mysql-shinobi:
-    image: mysql:5.7
+    image: mysql
+    container_name: mysql-shinobi
+    volumes:
+      - "mysql-data:/app"
+    command: --default-authentication-plugin=mysql_native_password
     environment:
+      # MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # MYSQL_DATABASE: ${MYSQL_DATABASE}
+      # MYSQL_USER: ${MYSQL_USER}
+      # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: shinobi_store
       MYSQL_USER: shinobi
       MYSQL_PASSWORD: jutsu
-      MYSQL_ROOT_PASSWORD: mysecretpassword
-    volumes:
-      - mysql-data:/var/lib/mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
+    expose:
+      - 3306
   nest-app:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    depends_on:
-      - mysql-shinobi
+    container_name: shinobi-backend
+    working_dir: /app
     links:
-      - mysql-shinobi
+      - "mysql-shinobi"
+    depends_on:
+      - "mysql-shinobi"
+    ports:
+      - "3001:3000"
+
+    environment:
+      APP_NAME: shinobi
+      NODE_ENV: production
+      STAGE: prod
+      APP_VERSION: 0.0.1_dock_test
+      DATABASE_NAME: shinobi_store
+      # DATABASE_URL: mysql://shinobi:deditec@mysql:3306/shinobi_tests
+      DATABASE_USERNAME: shinobi
+      DATABASE_PASSWORD: jutsu
+      DATABASE_PORT: 3306
+      DATABASE_HOST: mysql-shinobi
+      DOMAIN_FRONTEND: http://localhost:8080
+      SYNCHRONIZE: false
+
 volumes:
   mysql-data:
