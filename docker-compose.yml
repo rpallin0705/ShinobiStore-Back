@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mysql-shinobi:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: shinobi_store
+      MYSQL_USER: shinobi
+      MYSQL_PASSWORD: jutsu
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+  nest-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - mysql-shinobi
+    links:
+      - mysql-shinobi
+volumes:
+  mysql-data:

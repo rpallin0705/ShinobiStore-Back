@@ -75,7 +75,6 @@ export class UsersService {
 
 
         const verificationToken = await jwt.sign({ username: usuarioNuevo.username }, 'Aghlsp9.dsgd', { expiresIn: '5m' });
-        console.log(verificationToken);
 
         try {
             this.emailSender(usuarioNuevo.email, usuarioNuevo.username, verificationToken, 0);
