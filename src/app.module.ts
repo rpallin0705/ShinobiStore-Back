@@ -27,7 +27,7 @@ import { MailerService } from './mailer.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'mysql-shinobi',
       port: 3306,
       username: 'shinobi',
       password: 'jutsu',
