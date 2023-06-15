@@ -22,6 +22,7 @@ export class StockService {
    * @returns El objeto de stock creado.
    */
   async create(createStockDto: CreateStockDto) {
+    console.log(createStockDto.game_id);
 
     const game: Game = await this.gameRepository.findOne({ where: { id: createStockDto.game_id } });
 
