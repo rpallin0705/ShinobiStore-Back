@@ -15,10 +15,11 @@ services:
       MYSQL_DATABASE: shinobi_store
       MYSQL_USER: shinobi
       MYSQL_PASSWORD: jutsu
+      # MYSQL_TCP_PORT: 3307
     ports:
-      - "3306:3306"
+      - "3307:3306"
     expose:
-      - 3306
+      - 3307
   nest-app:
     build:
       context: .
