@@ -3,8 +3,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
 import { CreateUserDto, LoginUserDto, UpdatePasswordDto } from './dto/create-user-dto';
 import { UsersService } from './users.service';
-import { response } from 'express';
-import { User } from './user/user.entity';
+
 
 @Controller('users')
 export class UsersController {
@@ -17,7 +16,7 @@ export class UsersController {
     @Get()
     getAll(@Res() response) {
         this.userService.getAll().then(user => {
-            response.status(HttpStatus.CREATED).json(user);
+            response.status(HttpStatus.OK).json(user);
         }).catch((error: Error) => {
             response.status(HttpStatus.FORBIDDEN).json(error.message);
         });
