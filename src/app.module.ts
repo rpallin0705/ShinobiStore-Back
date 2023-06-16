@@ -27,15 +27,13 @@ import { MailerService } from './mailer.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'mysql-shinobi',
+      host: 'localhost',
       port: 3306,
       username: 'shinobi',
       password: 'jutsu',
       database: 'shinobi_store',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-      logging: true,
-
     }),
     TypeOrmModule.forFeature([User, Game, Stock, MyGame, Tarjeta, FavGame]),
 
