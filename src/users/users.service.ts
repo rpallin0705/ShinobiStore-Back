@@ -103,71 +103,71 @@ export class UsersService {
     }
 
 
-/**
- * Verifica un token de verificación y actualiza el estado de verificación del usuario.
- * @param verificationToken: El token de verificación generado para el usuario.
- * @returns Una promesa que se resuelve en el usuario actualizado.
- * @throws Error si el token es inválido o ha expirado.
- */
-async verification(verificationToken: string): Promise<User> {
-    // Buscar un usuario existente en la base de datos utilizando el token de verificación.
-    const existingUser = await this.userRepository.createQueryBuilder("user")
-        .where("user.token = :token", { token: verificationToken })
-        .getOne();
+    /**
+     * Verifica un token de verificación y actualiza el estado de verificación del usuario.
+     * @param verificationToken: El token de verificación generado para el usuario.
+     * @returns Una promesa que se resuelve en el usuario actualizado.
+     * @throws Error si el token es inválido o ha expirado.
+     */
+    async verification(verificationToken: string): Promise<User> {
+        // Buscar un usuario existente en la base de datos utilizando el token de verificación.
+        const existingUser = await this.userRepository.createQueryBuilder("user")
+            .where("user.token = :token", { token: verificationToken })
+            .getOne();
 
-    try {
-        // Verificar si el token de verificación es válido.
-        const valido = jwt.verify(verificationToken, 'Aghlsp9.dsgd');
-    }
-    catch (error) {
-        // Lanzar error si el token es inválido o ha expirado.
-        throw new Error('El token es inválido o ha expirado.');
-    }
+        try {
+            // Verificar si el token de verificación es válido.
+            const valido = jwt.verify(verificationToken, 'Aghlsp9.dsgd');
+        }
+        catch (error) {
+            // Lanzar error si el token es inválido o ha expirado.
+            throw new Error('El token es inválido o ha expirado.');
+        }
 
-    // Eliminar el token de verificación del usuario existente.
-    existingUser.token = null;
+        // Eliminar el token de verificación del usuario existente.
+        existingUser.token = null;
 
-    // Guardar los cambios en el usuario en la base de datos.
-    return await this.userRepository.save(existingUser);
-}
-
-
- /**
- * Reinicia la contraseña de un usuario.
- * @param email: El correo electrónico del usuario para el cual se restablecerá la contraseña.
- * @throws Error si el correo electrónico no está registrado o si ocurre un error al enviar el correo de reinicio.
- * @returns Una promesa que se resuelve en el usuario actualizado con el token de reinicio de contraseña.
- */
-async passwordReset(email: string) {
-
-    // Buscar un usuario existente en la base de datos utilizando el correo electrónico proporcionado.
-    const existingUser = await this.userRepository.createQueryBuilder("user")
-        .where("user.email = :email", { email: email })
-        .getOne();
-
-    // Lanzar error si el correo electrónico no está registrado.
-    if (!existingUser) {
-        throw new Error('Correo no registrado');
+        // Guardar los cambios en el usuario en la base de datos.
+        return await this.userRepository.save(existingUser);
     }
 
-    // Generar un token de reinicio de contraseña utilizando JWT.
-    const verificationToken = await jwt.sign({ username: existingUser.username }, 'Aghlsp9.dsgd', { expiresIn: '5m' });
+
+    /**
+    * Reinicia la contraseña de un usuario.
+    * @param email: El correo electrónico del usuario para el cual se restablecerá la contraseña.
+    * @throws Error si el correo electrónico no está registrado o si ocurre un error al enviar el correo de reinicio.
+    * @returns Una promesa que se resuelve en el usuario actualizado con el token de reinicio de contraseña.
+    */
+    async passwordReset(email: string) {
+
+        // Buscar un usuario existente en la base de datos utilizando el correo electrónico proporcionado.
+        const existingUser = await this.userRepository.createQueryBuilder("user")
+            .where("user.email = :email", { email: email })
+            .getOne();
+
+        // Lanzar error si el correo electrónico no está registrado.
+        if (!existingUser) {
+            throw new Error('Correo no registrado');
+        }
+
+        // Generar un token de reinicio de contraseña utilizando JWT.
+        const verificationToken = await jwt.sign({ username: existingUser.username }, 'Aghlsp9.dsgd', { expiresIn: '5m' });
 
 
-    try {
-        // Enviar un correo electrónico al usuario con el token de reinicio de contraseña.
-        this.emailSender(existingUser.email, existingUser.username, verificationToken, 1);
-    } catch (error) {
-        // Lanzar error si ocurre un error al enviar el correo de reinicio.
-        throw new Error("El correo no se pudo enviar");
+        try {
+            // Enviar un correo electrónico al usuario con el token de reinicio de contraseña.
+            this.emailSender(existingUser.email, existingUser.username, verificationToken, 1);
+        } catch (error) {
+            // Lanzar error si ocurre un error al enviar el correo de reinicio.
+            throw new Error("El correo no se pudo enviar");
+        }
+
+        // Asignar el token de reinicio de contraseña al usuario existente.
+        existingUser.pass_token = verificationToken;
+
+        // Guardar los cambios en el usuario en la base de datos.
+        return await this.userRepository.save(existingUser);
     }
-
-    // Asignar el token de reinicio de contraseña al usuario existente.
-    existingUser.pass_token = verificationToken;
-
-    // Guardar los cambios en el usuario en la base de datos.
-    return await this.userRepository.save(existingUser);
-}
 
 
     /**
@@ -177,32 +177,32 @@ async passwordReset(email: string) {
  * @returns Una promesa que se resuelve en el usuario actualizado con la contraseña cambiada.
  * @throws Error si el token es inválido o ha expirado.
  */
-async passwordChange(updatePassworddto: UpdatePasswordDto, verificationToken: string) {
-    // Buscar un usuario existente en la base de datos utilizando el token de verificación de contraseña.
-    const existingUser = await this.userRepository.createQueryBuilder("user")
-        .where("user.pass_token = :pass_token", { pass_token: verificationToken })
-        .getOne();
+    async passwordChange(updatePassworddto: UpdatePasswordDto, verificationToken: string) {
+        // Buscar un usuario existente en la base de datos utilizando el token de verificación de contraseña.
+        const existingUser = await this.userRepository.createQueryBuilder("user")
+            .where("user.pass_token = :pass_token", { pass_token: verificationToken })
+            .getOne();
 
 
-    try {
-        // Verificar si el token de verificación es válido.
-        const valido = jwt.verify(verificationToken, 'Aghlsp9.dsgd');
+        try {
+            // Verificar si el token de verificación es válido.
+            const valido = jwt.verify(verificationToken, 'Aghlsp9.dsgd');
+        }
+        catch (error) {
+            // Lanzar error si el token es inválido o ha expirado.
+            throw new Error('El token es inválido o ha expirado.');
+        }
+
+        // Hashear la nueva contraseña.
+        const hashedPassword = await bcrypt.hash(updatePassworddto.password, 10);
+
+        // Actualizar la contraseña del usuario existente y eliminar el token de verificación.
+        existingUser.password = hashedPassword;
+        existingUser.pass_token = null;
+
+        // Guardar los cambios en el usuario en la base de datos.
+        return await this.userRepository.save(existingUser);
     }
-    catch (error) {
-        // Lanzar error si el token es inválido o ha expirado.
-        throw new Error('El token es inválido o ha expirado.');
-    }
-
-    // Hashear la nueva contraseña.
-    const hashedPassword = await bcrypt.hash(updatePassworddto.password, 10);
-
-    // Actualizar la contraseña del usuario existente y eliminar el token de verificación.
-    existingUser.password = hashedPassword;
-    existingUser.pass_token = null;
-
-    // Guardar los cambios en el usuario en la base de datos.
-    return await this.userRepository.save(existingUser);
-}
 
 
 
@@ -214,11 +214,11 @@ async passwordChange(updatePassworddto: UpdatePasswordDto, verificationToken: st
         let mensaje: string = '';
         switch (passOrVerif) {
             case 0:
-                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Bienvenido/a ShinobiStore ${username}'</h1><h1 style="padding-top:20px">Clicka el enlace para activar tu cuenta:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:8080/login/${token}">ShinobiStore verification</a></p></body>`
+                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Bienvenido/a ShinobiStore ${username}'</h1><h1 style="padding-top:20px">Clicka el enlace para activar tu cuenta:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:3000/login/${token}">ShinobiStore verification</a></p></body>`
                 subject = 'Bienvenido a ShinobiStore ' + username;
                 break;
             case 1:
-                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Has solicitado cambiar la contraseña</h1><h1 style="padding-top:20px">Clicka el enlace para cambiar su contraseña:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:8080/reset/${token}">ShinobiStore verification</a></p></body>`
+                mensaje = `<body><header style=><img style="height: 200px" src="${image}" alt=""></header><h1 style="padding-top:20px">Has solicitado cambiar la contraseña</h1><h1 style="padding-top:20px">Clicka el enlace para cambiar su contraseña:</h1><p style="padding-top:50px; font-size: 50px"><a href="http://localhost:3000/reset/${token}">ShinobiStore verification</a></p></body>`
                 subject = 'Cambio de contraseña de ' + username;
                 break;
         }

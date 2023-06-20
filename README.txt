@@ -1,4 +1,4 @@
-antes de emepzar, para tener la base de datos con todos los datos de los juegos ejecutar el script Dump20230616.sql en tu gestor de base de datos
+antes de emepzar, para tener la base de datos con todos los datos de los juegos ejecutar el script Shinobistore.sql en tu gestor de base de datos
 
 
 
