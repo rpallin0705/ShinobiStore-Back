@@ -358,7 +358,8 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 - Contenedores Docker
 - Testing automatizado
 - Seguridad web
+- Arquitectura de microservicios
 
 ---
 
-⭐ **¡Gracias por revisar mi proyecto!** Este backend demuestra habilidades avanzadas en desarrollo de APIs, seguridad, testing y despliegue con tecnologías modernas.
+⭐ **¡Gracias por revisar mi proyecto!** Este backend demuestra habilidades avanzadas en desarrollo de APIs, seguridad, testing y despliegue con tecnologías modernas. 
